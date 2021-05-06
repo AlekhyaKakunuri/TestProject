@@ -1,0 +1,15 @@
+# IDEs and editors
+/dist
+/node_modules
+/.metadata
+.settings/
+.sign/
+.settings
+.sign
+/.settings
+/.sign
+.metadata
+.metadata/
+*.wgt
+
+

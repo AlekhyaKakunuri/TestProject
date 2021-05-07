@@ -1,0 +1,152 @@
+Exercise:1
+----------
+1. In the Scala REPL, type 3. followed by the Tab key. What methods can be
+applied?
+
+Ans: many methods we have including %, &, *, +, toByte, toChar etc.
+
+2. In the Scala REPL, compute the square root of 3, and then square that value.
+By how much does the result differ from 3? (Hint: The res variables are your
+friend.)
+Ans:
+3. Are the res variables val or var?
+Ans: val
+
+4. Scala lets you multiply a string with a number—try out "crazy" * 3 in the REPL.
+What does this operation do? Where can you find it in Scaladoc?
+
+Ans: crazycrazycrazy; Can be found in the StringOps class
+
+5.What does 10 max 2 mean? In which class is the max method defined?
+Ans: Defined in the RichInt class.
+
+6. Using BigInt, compute 21024.
+  BigInt(2) pow 1024
+
+7. What do you need to import so that you can get a random prime as
+probablePrime(100, Random), without any qualifiers before probablePrime and Random?
+
+8. One way to create random file or directory names is to produce a random
+BigInt and convert it to base 36, yielding a string such as "qsnvbevtomcj38o06kul".
+Poke around Scaladoc to find a way of doing this in Scala.
+
+Ans:probablePrime(100, Random).toString(36)
+
+9. How do you get the first character of a string in Scala? The last character?
+            s.head
+            s(0)
+            s.last
+            s(s.length - 1)
+
+10. What do the take, drop, takeRight, and dropRight string functions do? What
+advantage or disadvantage do they have over using substring?
+
+Ans: val s = "String"
+s.take(2)  O/p: "St" 
+s.drop(2)  O/p: ring
+s.takeRight(2) O/p: ng
+s.dropRight(2) O/p:Stri
+	
+Exercise:2
+----------
+
+1. The signum of a number is 1 if the number is positive, –1 if it is negative, and
+0 if it is zero. Write a function that computes this value.
+
+2. What is the value of an empty block expression {}? What is its type? 
+Ans: Unit type
+Ex: 
+val a={} // O/p : ()
+a: Unit = () means no useful value
+
+3. Come up with one situation where the assignment x = y = 1 is valid in Scala.
+(Hint: Pick a suitable type for x.)
+Ans:
+var x={};var y=0;x=y=1
+x: Unit = ()
+y: Int = 1
+x: Unit = ()
+
+4. Write a Scala equivalent for the Java loop
+for (int i = 10; i >= 0; i--) System.out.println(i);
+
+ans:
+for(i -> 10 to 1 by -1) println(i)
+
+/* Using recursion */
+def countdown2(x: Int): Unit = if (x > 0) {
+  println(x)
+  countdown2(x - 1)
+}
+
+5. Write a procedure countdown(n: Int) that prints the numbers from n to 0.
+
+6. Write a for loop for computing the product of the Unicode codes of all letters
+in a string. For example, the product of the characters in "Hello" is 825152896.
+
+7. Solve the preceding exercise without writing a loop. (Hint: Look at the StringOps
+Scaladoc.)
+
+8. Write a function product(s : String) that computes the product, as described
+in the preceding exercises.
+Chapter 2 Control Structures and Functions 28.
+
+9. Make the function of the preceding exercise a recursive function.
+
+
+
+
+package test
+import scala.math._
+import BigInt.probablePrime
+import util.Random
+object test {
+  def main(args:Array[String]){  
+            println(3 - pow(sqrt(3), 2)) 
+            println("crazy" * 3)
+            println (10 max 2)
+            println(BigInt(2) pow 1024)
+            println (probablePrime(100, Random))
+            println(probablePrime(100, Random).toString(36))
+            val s = "String"
+            println(s.head)
+            println(s(0))
+            println(s.last)
+            println(s(s.length - 1))
+            println("Hello".intersect("World"))
+            val name = readLine("Your name: ")
+            print("Enter Num: ")
+            val num = readInt()
+//            printf("Hello, %s! Next year, you will be %d.\n", name, age + 1)
+            val c=new Package()
+            c.test
+            println(c.abs(num))
+            val a={}
+            println(a)
+            for(i <- 10 to 1 by -1) println(i)
+            c.countdown(num)
+            println(c.unicodeProduct(name))
+            println(c.product(name))
+            println(c.product1(name))
+    }
+}
+class Package{
+  def test{
+    println("hello")
+  }
+  def abs(x: Double) = if (x > 0) "Positive" else if(x < 0) "Negative" else "Zero"
+  def countdown(n: Int){
+    for(i <- n to 0 by -1) println(i)
+  }
+  def unicodeProduct(s: String) = {
+  var i = 1
+  for (c <- s) i *= c.toInt
+  i
+}
+ def product(s: String) = s.foldLeft(1)(_*_)
+ 
+ def product1(s: String): Int = {
+ if (s.length == 0) 1
+ else s.head * product1(s.tail)
+}
+}

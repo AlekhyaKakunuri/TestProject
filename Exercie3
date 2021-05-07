@@ -1,0 +1,146 @@
+Exercise 2:
+
+10. Write a function that computes x
+n
+, where n is an integer. Use the following
+recursive definition:
+• x
+n
+ = y
+2
+ if n is even and positive, where y = x
+n / 2
+.
+• x
+n
+ = x· x
+n – 1 if n is odd and positive.
+• x
+0
+ = 1.
+• x
+n
+ = 1 / x
+–n
+ if n is negative.
+Don’t use a return statement.
+
+Ans:
+
+Exercise 3:
+-----------
+1.Write a code snippet that sets a to an array of n random integers between 0
+(inclusive) and n (exclusive).
+
+2. Write a loop that swaps adjacent elements of an array of integers. For example,
+Array(1, 2, 3, 4, 5) becomes Array(2, 1, 4, 3, 5).
+
+3. Repeat the preceding assignment, but produce a new array with the swapped
+values. Use for/yield.
+
+4. Given an array of integers, produce a new array that contains all positive
+values of the original array, in their original order, followed by all values that
+are zero or negative, in their original order.
+
+5. How do you compute the average of an Array[Double]?
+
+6. How do you rearrange the elements of an Array[Int] so that they appear in
+reverse sorted order? How do you do the same with an ArrayBuffer[Int]?
+
+7. Write a code snippet that produces all values from an array with duplicates
+removed. (Hint: Look at Scaladoc.)
+
+8. Rewrite the example at the end of Section 3.4, “Transforming Arrays,” on
+page 34 using the drop method for dropping the index of the first match. Look
+the method up in Scaladoc.
+
+9. Make a collection of all time zones returned by java.util.TimeZone.getAvailableIDs
+that are in America. Strip off the "America/" prefix and sort the result.
+
+10. Import java.awt.datatransfer._ and make an object of type SystemFlavorMap with
+the call
+val flavors = SystemFlavorMap.getDefaultFlavorMap().asInstanceOf[SystemFlavorMap]
+Then call the getNativesForFlavor method with parameter DataFlavor.imageFlavor
+and get the return value as a Scala buffer. (Why this obscure class? It’s hard
+to find uses of java.util.List in the standard Java library.)
+
+Answers:
+
+package test
+import util.Random
+import scala.math._
+import scala.collection.mutable.ArrayBuffer
+import java.util.TimeZone
+import java.awt.datatransfer._ 
+class execise2 {
+  def matchfn(x:Int, n:Int) = n match {
+     case n if n > 0 && (n%2 == 0) => pow(x, n/2)
+     case n if n > 0 && (n%2 == 1) => x * pow(x, n-1)
+     case 0 => 1
+     case n if n < 0 => 1/pow(x, -n)
+     }
+  
+  def randomRange(n:Int) = for(i <- 0 to n) yield Random.nextInt(n)
+  
+  def swapAdjEle():Array[Int]={
+    val a = Array(1, 2, 3, 4, 5)
+    val b=a.grouped(2).flatMap(_.reverse).toArray
+      b
+  }
+  
+  def forSwapAdjEle()={
+    val a = Array(1, 2, 3, 4, 5)
+    val c=(for {b <- a.grouped(2); c <- b.reverse} yield c).toArray
+    c
+  }
+  
+  def partitionFun()={
+    val a = Array(-5, 2,3,4, -10, 0, -12,-24)
+    val(positive, negative) = a partition(_ > 0)
+     positive ++ negative
+  }
+  
+  def avgDoubleArr()={
+    val a=Array(10.5,14.5,2.5,5.7)
+     a.sum/a.length
+  }
+  
+  def revsortedOrrder()={
+    val a=Array(10.5,14.5,2.5,5.7)
+     a.sortWith(_ > _)
+  }
+  
+    def revsortedOrArBufr()={
+    val a=ArrayBuffer(10.5,14.5,2.5,5.7)
+     a.sortWith(_ > _)
+  }
+   def dupliFund()={
+      val arr = Array(2,2,4,5,6,6,3,3,1,1,1,1,0)
+      arr.distinct 
+   }
+   
+   def dropusng()={
+     val array = Array(1,-2,-3,2,0)
+      var idx = for (i <- array.indices if array(i) < 0) yield i
+      if (idx.length == 0)
+        array
+      else {
+        idx = idx.drop(1)
+        var buff = array.toBuffer
+        for (i <- idx.reverse) buff.remove(i)
+        buff.toArray
+      }
+   }
+   
+   def americanTz() = {
+//  for (tz <- java.util.TimeZone.getAvailableIDs
+//       if tz.startsWith("America"))
+//    yield tz.replace("America/", "")
+     TimeZone.getAvailableIDs filter(t => t.contains("America/")) map (t => t.split('/') last) sortWith(_ < _)
+}
+   
+   def datatransfer()={
+     val flavors = SystemFlavorMap.getDefaultFlavorMap().asInstanceOf[SystemFlavorMap].getNativesForFlavor( DataFlavor.imageFlavor)
+     flavors.toArray.toBuffer
+   }
+}

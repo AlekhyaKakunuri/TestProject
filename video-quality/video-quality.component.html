@@ -1,0 +1,41 @@
+<div class="modal" id="video-quality-data" style="display: none;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content"> 
+        <div class="close-icon" (click)="callbackFromChild(false)">
+            <span >X</span>
+        </div>        
+      <div class="modal-body">
+                            
+        <div class="modal-header">           
+            <div class="modal-title" >Video Settings</div>            
+        </div> 
+        <div class="quality_selection">
+
+          <div class="radio_container hd"  >
+            <label class="radio_container_inner" [ngClass]=" {'isSelected' :inputData.quality == 'HD' }" (click)="inputData.quality = 'HD'" > {{HDData.displayTitle}} <span *ngIf="!!HDData.displaySubTitle" class="sm_label">{{SDData.displaySubTitle}}</span>
+              <input type="radio" checked name="radiotrue"  >
+              <span class="checkmark" [ngClass]=" {'isSelected' :inputData.quality == 'HD' }" ></span>
+            </label>
+          </div>
+
+          <div class="radio_container sd"  > 
+            <label class="radio_container_inner" [ngClass]=" {'isSelected' :inputData.quality == 'SD' }" (click)="inputData.quality = 'SD'" > {{SDData.displayTitle}} <span *ngIf="!!SDData.displaySubTitle" class="sm_label">{{SDData.displaySubTitle}}</span>
+              <input type="radio" checked  name="radiofalse" >
+              <span class="checkmark" [ngClass]=" {'isSelected' :inputData.quality == 'SD' }" ></span>
+            </label>
+          </div>
+
+        </div>
+        <div class="quality-sub-title">
+          <span *ngIf="inputData.quality == 'HD'">{{HDData.displayMessage}}</span>
+          <span *ngIf="inputData.quality == 'SD'" >{{SDData.displayMessage}}</span>
+        </div>
+        <div class="btn-wrap">
+            <button type="submit" class="btn btn-success" (click)="callbackFromChild(inputData.quality)">Ok</button>            
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="video-quality-overlay" style="display: none;" ></div>

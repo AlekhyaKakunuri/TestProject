@@ -1,0 +1,85 @@
+@import '../scss/_vars.scss';
+
+.modal{position: fixed;  top: 50%;  left: 50%;  transform: translate(-50%, -50%);
+    .modal-dialog{  max-width:600px; width:100%; border-radius: 4px; padding:20px; box-sizing: border-box;
+        .modal-content{ padding:20px 80px; border: solid 1px #41414e;  background-color: #2b2b36;}
+        @media screen and (max-width:768px){
+            .modal-content{padding: 20px 40px ; }              
+          }
+        .close-icon{  position: absolute; top: 10px; right: 15px; font-size:20px; cursor: default;}
+        .modal-body{
+           
+            .modal-header{ margin-top:20px;
+                .modal-title{    font-size: 24px; font-weight: bold;}                
+            }
+            .quality_selection{text-align: center; margin:0 -12px;
+                .radio_container{ width:180px; margin: 0 12px; display: inline-block;}
+                .radio_container_inner {
+                    display: inline-block; position: relative; padding-left: 35px;
+                    margin-bottom: 12px;  cursor: pointer; font-size: 22px; font-style: italic;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    border-radius: 4px; border: solid 1px #464653; background-color: #363643; padding:12px 7px 12px 35px;
+                    width:100%; font-weight: bold;
+                    .sm_label{     font-weight: normal;
+                        font-style: normal;
+                        font-size: 18px;
+                        color: #eeeeee;
+                    }
+                  }
+                  .radio_container_inner.isSelected {border:solid 1px #28a745; }
+                  .radio_container input { position: absolute; opacity: 0; cursor: pointer; }
+                  .checkmark { position: absolute; top: 0; left: 0; height: 24px; width: 24px;
+                    border-radius: 50%;  border:solid 2px #525260; }
+                  .radio_container:hover input ~ .checkmark { background: none; }
+                  .radio_container input:checked ~ .checkmark.isSelected { background: none; border:solid 2px #28a745; }
+                  .checkmark:after { content: ""; position: absolute; display: none; }
+                  .radio_container input:checked ~ .checkmark:after { display: block; }
+                  .radio_container .checkmark.isSelected:after { top: 5px; left: 5px; width: 10px; height: 10px; border-radius: 50%; background: #28a745; }
+                    .hd{
+                        .checkmark{top: 16px; left: 52px;}
+                    }
+                    .sd{
+                        .checkmark{top: 16px; left: 28px;}
+                    }
+            }
+              .sm_label{     font-weight: normal;
+                        font-style: normal;
+                        font-size: 18px;
+                        color: #eeeeee;
+                    }
+           
+            .quality-sub-title{ opacity: 0.65; text-align: center; font-size: 16px;}
+            .btn-wrap{ text-align: center; 
+                @media screen and (max-width: 1100px){
+                    .btn {width: 100px;}              
+                }            
+            }  
+        }
+    }
+}
+
+input[type="radio"] {
+    /* remove standard background appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* create custom radiobutton appearance */
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    padding: 6px;
+    /* background-color only for content */
+    background-clip: content-box;
+    border: 2px solid #bbb;
+    background-color: #e7e6e7;
+    border-radius: 50%;
+    position:relative; top:5px; margin-right:10px;
+  }
+  
+  /* appearance for checked radiobutton */
+  input[type="radio"]:checked {
+    background-color: #93e026;
+  }  

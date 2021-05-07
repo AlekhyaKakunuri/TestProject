@@ -1,0 +1,291 @@
+<div class="dmargins_f_player">
+  <div class="player-page">
+    <!--Player-->
+    <div class="player-left">
+      <div class="player_inner_z" #playerLeft>
+        <div class="player-wrap" #playerwrap id="player-wrap">
+          <div #player class="player" id="player">                       
+            <img class="img img-responsive ott-player-image" src="{{getImagePath(sectionInfo.backgroundImage)}}"
+              (error)="$event.target.src = appConfig.lazyimage3x" />           
+
+            <div *ngIf="!!sectionInfo && !sectionInfo.streamStatus.hasAccess" class="content_not_available">
+              <div *ngIf='!streamNotAvail' class="inner">
+                  <span class="pl_si_label"><i aria-hidden="true" class="fa fa-exclamation-circle"></i>
+                    {{subscribeTitle}}.
+                  </span>
+              </div>
+              <div *ngIf='!!streamNotAvail' class="row remove-margin ott-column-margin text_center">
+                  <span><i aria-hidden="true" class="fa fa-exclamation-circle"></i>
+                    {{streamNotAvail}}.
+                  </span>
+              </div>
+            </div>
+
+            <!-- content not available in your region error -->
+            <span *ngIf="!!sectionInfo && !!sectionInfo.streamStatus.hasAccess && !!streamNotAvail"
+              class="ott-play-icon ott-shadow ott-play-text">
+              <div class="row remove-margin ott-column-margin">
+                <div class="row remove-margin ott-column-margin sign-in-wrapper">
+                  <span style="display:block;margin:10px 0 0 0"><i aria-hidden="true"
+                      class="fa fa-exclamation-circle"></i>
+                    &nbsp; &nbsp; {{streamNotAvail}}.
+                  </span>
+                </div>
+              </div>
+            </span>
+
+
+            
+
+
+            </div>
+
+
+            <div *ngIf="!!showErrorSlate" class = 'error_slate'> We are working to correct a known issue with this stream and hope to have it resolved soon.<br> 
+              If you're a paying subscirber you may submit a ticket to customer support for additional information. If you are a free subscriber, please try again in few hours. We are sorry for the inconvenience. </div>
+
+            
+            <div class="player_control_backdrop"></div>
+            <div id="replay-btn" style="display:none">
+              <span (click)='rePlayVideo()' class="replay-title">
+                <!-- <i class="fa fa-undo" aria-hidden="true"></i> -->
+                <img title="replay" src="https://d2ivesio5kogrp.cloudfront.net/static/frndly/images/white-transparant_70x70.png"> 
+              </span>
+            </div>
+            <!-- next video card display-->
+            <!-- <div class="replay-button">
+              <span (click)='rePlayVideo()' *ngIf='!!nextVideosList && nextVideosList.length > 0' class="replay-title">
+                <i class="fa fa-undo" aria-hidden="true"></i> &nbsp;replay</span>
+            </div>  -->
+
+
+
+            <div class='next-video-container' *ngIf='!!nextVideosList && nextVideosList.length > 0'>
+
+                <div (click)='isNextVideo = true;upNextVideo(nextVideosList[0].target.path)' class="nxt_left">
+                  <img class="img-responsive ott-img-border-radius ott-logo-width ott-channel-img-height" src="{{getImagePath(nextVideosList[0].display.imageUrl)}}"
+                  (error)="$event.target.src = lazyLoadImg" [ngStyle]="{'height':height + 'px'}">
+                  <div class="play-button">
+                    <span class="play-button-text" (click)='isNextVideo = true;upNextVideo(nextVideosList[0].target.path)'>
+
+                      <div id='loading'>
+                          <div class='inner-shadow'>
+                              <i class="fa fa-play" aria-hidden="true"></i>
+                          </div>
+                          
+                            <div class='hold left'>
+                              <div class='fill'></div>
+                            </div>
+                            <div class='hold right'>
+                              <div class='fill'></div>
+                            </div>
+                          
+                        </div>
+
+                    </span>
+                  </div>                
+                </div>
+
+                  <div class="nxt_right" (click)='isNextVideo = true;upNextVideo(nextVideosList[0].target.path)'>
+                      <span>{{nextVideosList[0].display.coming_up_next}}</span>
+                      <h4>{{nextVideosList[0].display.title}}</h4>
+                  </div>                      
+            </div>
+            <!-- next video ends here-->
+
+
+            <!-- adding custom buttons live start over and Last Ch. -->
+            <div class ="player-btn" *ngIf="!isAdloading"> 
+              <button type="submit" class="btn btn-grey on_pl_btn mr15" *ngIf="!!showStartOver" (click)="openPlayerStartOver()">Start Over</button>
+              <button type="submit" class="btn btn-grey on_pl_btn mr15" *ngIf="!!showGolive" (click)="playLive()">Go Live</button>
+              <button type="submit" class="btn btn-grey on_pl_btn rt_align mr15" *ngIf="!!lastChannelInfo" (click) = "playLastChannel()">Last Ch.</button>
+              <button type="submit" class="btn btn-grey on_pl_btn rt_align mr15" *ngIf="!!enableNextEpisodeBtn && !!enableNextEpisodeBtn.isShow" (click)="isNextVideo = true;getNextVideos(false);">{{enableNextEpisodeBtn.btnText}}</button>
+
+              <!-- local now feed msg-->
+              <span *ngIf="!!localNowObj && !!localNowObj.nationalFeedMessage"> {{localNowObj.nationalFeedMessage}} </span>
+
+            </div> 
+
+            <div #startOverModal class="modal" id="startOver" tabindex="-1" role="dialog" aria-labelledby="">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">{{VideoTitle}}</h5>
+                    <span class="icon-close sprite-ico" (click)="closePlayerStartOver()">
+                    </span>
+                  </div>
+                  <div class="modal-body">
+                      <p> {{systemConfigs.startOverTextMessage}} </p>
+                        <div class="btn-wrap">
+                          <button type="submit" class="btn btn-primary" (click) = "playStartOver(true)">Start Over</button>
+                          <button type="submit" class="btn btn-grey" (click)="closePlayerStartOver()">Cancel</button>
+                        </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="modal" id="Concurrent" #concurrent >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">{{concurStreamStatusObj?.message}}</h5>
+                    <!--<span class="icon-close sprite-ico" (click)="closeConcurrentPopup()">
+                    </span>-->
+                  </div>
+                  <div class="modal-body">
+                      <p class="on_pl_desc">{{concurStreamStatusObj?.details?.description}}</p>
+                        <div class="btn-wrap">
+                          <button *ngIf="concurStreamStatusObj.code == -4000 || concurStreamStatusObj.code == -4001" type="submit" class="btn btn-grey" routerLink="/settings" >View Active Screens</button>
+                          <button *ngIf="concurStreamStatusObj.code == -4401 || concurStreamStatusObj.code == -4402" type="submit" class="btn btn-grey" routerLink="/guide" >Close Player</button>
+                          <button type="submit" class="btn btn-primary" *ngIf="concurStreamStatusObj.code != -4001 && concurStreamStatusObj.code != -4402 " (click) = "goToPackagesPage()" >Upgrade Plan</button>
+                        </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div #startOverModalFade class="modal-backdrop" id="fade"></div>
+
+          </div>
+        </div>
+      
+     
+
+        <div class="channel_desc">
+            <div class="player_desc_left_bl">
+              <div class="repeater" *ngFor="let datarow of sectionInfo.dataRows; let i=index;">
+                <!--content row  -->
+                <div class="prog_det_loop det_row_no_{{i}} " *ngIf="datarow.rowDataType=='content' && datarow.elements.length > 0">
+
+                  <div *ngFor="let element of datarow.elements; let ind=index;"
+                    class="pull-left page_type_{{sectionInfo.info.attributes.contentType}}">
+                    <span class="channel_desc_thumb" *ngIf="element.elementType=='image'">
+                      <div class="inner">
+                        <img class="channel_img" src="{{getImagePath(element.data)}}"
+                          (error)="$event.target.src = appConfig.lazyimage3x">
+                      </div>
+                    </span>
+
+                    <div class="ott-year ott-text-font rowNumber_{{element.rowNumber}} {{sectionInfo.info.attributes.contentType}}"
+                      *ngIf="element.elementType=='text' && element.elementSubtype == 'title'"
+                      [ngClass]="{'ott-video-title':i==0, 'ott-video-subtitle': i==1}"> 
+                      <h1 class="subtext1">{{element.data}}</h1>                   
+                    </div>
+
+                    <p class="ott-year ott-text-font {{element.elementSubtype}} rowNumber_{{element.rowNumber}} {{sectionInfo.info.attributes.contentType}}"
+                      *ngIf="element.elementType=='text' && element.elementSubtype != 'title' && element.elementSubtype != 'subtitle5' &&  element.data != ''"
+                      [ngClass]="{'ott-video-title':i==0, 'ott-video-subtitle': i==1}">
+                      <span *ngIf="element.elementSubtype == 'cast'" class="subtext1 cast_crew"> Cast & Crew : </span>
+                      <span class="subtext1" [innerHTML]="element.data"></span> 
+                      <span *ngIf="i==1" class="subtext1" [innerHTML]="subtitle5"></span>                                    
+                    </p>  
+
+                    <span class="ott-year ott-text-font description {{sectionInfo.info.attributes.contentType}}"
+                      *ngIf="element.elementType=='description'"
+                      [ngClass]="{'ott-video-title':i==0, 'ott-video-subtitle': i==1}">
+                      {{contentDescription}} <span class='show_more_desc' (click)='toggleDescription()'
+                        *ngIf='showMoreBtn'>{{showMoreBtnText}}</span>
+                    </span>
+
+                    <span class="ott-year ott-text-font {{sectionInfo.info.attributes.contentType}}"
+                      *ngIf="element.elementType=='marker' && element.elementSubtype != 'special' && element.elementSubtype != 'defaultQuality'"
+                      [ngClass]="{'ott-video-title':i==0, 'ott-video-subtitle': i==1}">
+                      <span class="" *ngIf="element.elementSubtype=='duration'"> <i class="fa fa-clock-o"
+                          aria-hidden="true">
+                        </i> {{element.data}}</span>
+                      <span *ngIf="element.elementSubtype=='rating'"> <i aria-hidden="true" class="fa fa-star"> </i>
+                        &nbsp;{{element.data}}</span>                     
+                    </span>
+                  </div>
+
+                </div> 
+
+
+                
+                <div class="exp available_until" *ngIf="i==2 && !!availableUntil">
+                  <span class="desk program_expiry_marker">
+                      {{availableUntil}}
+                  </span> 
+                </div> 
+
+                <div class="exp" *ngIf="i==2 && !!programExpiryString">
+                  <span class="desk program_expiry_marker">
+                      {{programExpiryString}}
+                  </span> 
+                </div>
+
+              </div>
+
+             
+
+              <!-- cast and crew here-->
+              <div class="repeater">
+                <ott-cast-crew *ngIf='!!sectionInfo.castCrewInfo' [content]='sectionInfo.castCrewInfo'></ott-cast-crew>
+              </div>
+
+
+            </div>
+            <div class="player_desc_right_bl text-right player_rel_shared">            
+
+               <div class="record_btn" *ngIf="(sectionInfo.info.attributes.isRecordingDisabled == 'false')">
+                <button (click) = "managenDVR()" [ngClass] ="{'btn-disabled  disable_record' : (sectionInfo.info.attributes.isRecorded == 'true') , 'record' : (sectionInfo.info.attributes.isRecorded == 'false')}" >
+                  <span class="red-dot"></span> Record
+                </button>
+              </div>
+              
+              
+            </div>
+        </div>
+      </div>
+    
+    <!--Video deatils -->
+
+    <div class="player-right" *ngIf='!!selectedSection'>
+      <div class="player-bar">
+        <div class="filter-days pt-20 tabs">
+          <div *ngFor='let item of sectionInfo.sectionData; let i = index;'>
+            <div *ngIf='(item.paneType == "section") && (i == 1)' class="day-name tab-link channels"
+              data-tab="suggested-channels">
+              <a (click)='viewSelectedSection(item.section.sectionInfo.code,i)'
+                [ngClass]='{"active": selectedSection == item.section.sectionInfo.code}'
+                href="javascript:;">{{item.section.sectionInfo.name}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div [ngStyle]="{'height' : relatedShowsHeight}" class="player-related-shows content nested"
+        [ngClass]="{'mCustomScrollbar':!!relatedShowsHeight}" id="content2">
+        <div *ngFor='let item of sectionInfo.sectionData'>
+            <div class="inner" *ngIf='item.paneType == "section" && selectedSection == item.section.sectionInfo.code &&  item.section.sectionData.data.length != 0'>
+              <article>
+                <ul class="catchup-dates-tab tab-content channels current" id="suggested-channels">
+                  <li class="player-related-items display-table dummy-cards" *ngFor="let card of item.section.sectionData.data">
+                    <ott-card class="card_row" [data]="card" [pageType] = "sectionInfo.info.pageType"> </ott-card>
+                  </li>
+                </ul>
+              </article>
+            </div>
+            <div class="inner" *ngIf='item.paneType == "section" && selectedSection == item.section.sectionInfo.code && item.section.sectionData.data.length == 0'>
+              <article>
+                <ul class="catchup-dates-tab tab-content channels current" id="suggested-channels">
+                  <li class="player-related-items display-table dummy-cards">
+                    Content not available.
+                  </li>
+                </ul>
+              </article>
+            </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- include partial for displaying program info -->
+<app-templates *ngIf="!!childTemplateData.attributes && (childTemplateData?.attributes?.isRecorded == 'false')" [templateData] = "{}" [nDVRExternalData] = "childTemplateData" (ndvrToastInfo) = "ndvrToastInfo($event)" (closePartialRender) = "closePartialRender()"></app-templates>
+
+<!-- record conform popup-->
+<toast-popup *ngIf="!!showToastMessage.status" (closeRecordPopUp)="closeRecordPopUp()"  [toastObject]='showToastMessage'> </toast-popup>
+
+
